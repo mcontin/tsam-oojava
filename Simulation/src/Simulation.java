@@ -7,13 +7,13 @@ public class Simulation {
 	public static ArrayList<Prey> preys;
 	
 	public static void main(String[] args){
-		generateField(20,20,5,100);
+		generateField(20,20,10,100);				//x,y,nPredators,nPreys
 		int i=0;
-		while(i<1000){
+		while(i<500){
 			printField();
 			turn();
 			try {
-			    Thread.sleep(500);                 //1000 milliseconds is one second.
+			    Thread.sleep(1000);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
 			}
@@ -35,7 +35,7 @@ public class Simulation {
 		int elY = -1;
 		Predator tPredator = null;
 		predators = new ArrayList<Predator>();
-		while(elsGenerated<5){				//predators generation
+		while(elsGenerated<nPredators){				//predators generation
 			do{								//tries x and y until position is free, then creates element
 				elX = ThreadLocalRandom.current().nextInt(0, 19 + 1);
 				elY = ThreadLocalRandom.current().nextInt(0, 19 + 1);
@@ -48,7 +48,7 @@ public class Simulation {
 		
 		Prey tPrey = null;
 		preys = new ArrayList<Prey>();
-		while(elsGenerated<100){			//preys generation
+		while(elsGenerated<nPreys){			//preys generation
 			do{								//tries x and y until position is free, then creates element
 				elX = ThreadLocalRandom.current().nextInt(0, 19 + 1);
 				elY = ThreadLocalRandom.current().nextInt(0, 19 + 1);
@@ -197,7 +197,7 @@ public class Simulation {
 						predators.add(new Predator(tPredator.getX()+1,tPredator.getY()));
 						field[tPredator.getX()+1][tPredator.getY()].occupy(new Predator(tPredator.getX()+1,tPredator.getY()));
 					}
-					else if(tPredator.getX() - 1 <= 19 && field[tPredator.getX()-1][tPredator.getY()].isFree()){
+					else if(tPredator.getX() - 1 >= 0 && field[tPredator.getX()-1][tPredator.getY()].isFree()){
 						predators.add(new Predator(tPredator.getX()-1,tPredator.getY()));
 						field[tPredator.getX()-1][tPredator.getY()].occupy(new Predator(tPredator.getX()-1,tPredator.getY()));
 					}
@@ -205,12 +205,79 @@ public class Simulation {
 						predators.add(new Predator(tPredator.getX(),tPredator.getY()+1));
 						field[tPredator.getX()][tPredator.getY()+1].occupy(new Predator(tPredator.getX(),tPredator.getY()+1));
 					}
-					else if(tPredator.getY() - 1 <= 19 && field[tPredator.getX()][tPredator.getY()-1].isFree()){
+					else if(tPredator.getY() - 1 >= 0 && field[tPredator.getX()][tPredator.getY()-1].isFree()){
 						predators.add(new Predator(tPredator.getX(),tPredator.getY()-1));
 						field[tPredator.getX()][tPredator.getY()-1].occupy(new Predator(tPredator.getX(),tPredator.getY()-1));
 					}
 				}
 			}
 		}
+		
+		for(Prey tPrey: new ArrayList<Prey>(preys)){
+			if(tPrey.isAlive()){
+				direction = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+				switch(direction){
+					case 0:			//up y-1
+						if(tPrey.getY() - 1 >= 0){
+							if(field[tPrey.getX()][tPrey.getY()-1].isFree()){
+								field[tPrey.getX()][tPrey.getY()].free();
+								tPrey.moveUp();
+								field[tPrey.getX()][tPrey.getY()].occupy(tPrey);
+							}
+						}
+						break;
+					case 1:			//right x+1
+						if(tPrey.getX() + 1 <= 19){
+							if(field[tPrey.getX()+1][tPrey.getY()].isFree()){
+								field[tPrey.getX()][tPrey.getY()].free();
+								tPrey.moveRight();
+								field[tPrey.getX()][tPrey.getY()].occupy(tPrey);
+							}
+						}
+						break;
+					case 2:			//down y+1
+						if(tPrey.getY() + 1 <= 19){
+							if(field[tPrey.getX()][tPrey.getY()+1].isFree()){
+								field[tPrey.getX()][tPrey.getY()].free();
+								tPrey.moveDown();
+								field[tPrey.getX()][tPrey.getY()].occupy(tPrey);
+							}
+						}
+						break;
+					case 3:			//left x-1
+						if(tPrey.getX() - 1 >= 0){
+							if(field[tPrey.getX()-1][tPrey.getY()].isFree()){
+								field[tPrey.getX()][tPrey.getY()].free();
+								tPrey.moveLeft();
+								field[tPrey.getX()][tPrey.getY()].occupy(tPrey);
+							}
+						}
+						break;
+					default:
+						break;
+				}
+				tPrey.increaseEgg();
+				if(tPrey.getEgg() == 3){
+					tPrey.resetEgg();
+					if(tPrey.getX() + 1 <= 19 && field[tPrey.getX()+1][tPrey.getY()].isFree()){
+						preys.add(new Prey(tPrey.getX()+1,tPrey.getY()));
+						field[tPrey.getX()+1][tPrey.getY()].occupy(new Prey(tPrey.getX()+1,tPrey.getY()));
+					}
+					else if(tPrey.getX() - 1 >= 0 && field[tPrey.getX()-1][tPrey.getY()].isFree()){
+						preys.add(new Prey(tPrey.getX()-1,tPrey.getY()));
+						field[tPrey.getX()-1][tPrey.getY()].occupy(new Prey(tPrey.getX()-1,tPrey.getY()));
+					}
+					else if(tPrey.getY() + 1 <= 19 && field[tPrey.getX()][tPrey.getY()+1].isFree()){
+						preys.add(new Prey(tPrey.getX(),tPrey.getY()+1));
+						field[tPrey.getX()][tPrey.getY()+1].occupy(new Prey(tPrey.getX(),tPrey.getY()+1));
+					}
+					else if(tPrey.getY() - 1 >= 0 && field[tPrey.getX()][tPrey.getY()-1].isFree()){
+						preys.add(new Prey(tPrey.getX(),tPrey.getY()-1));
+						field[tPrey.getX()][tPrey.getY()-1].occupy(new Prey(tPrey.getX(),tPrey.getY()-1));
+					}
+				}
+			}
+		}
+		
 	}
 }

@@ -37,7 +37,13 @@ public class Prey {
 	public int getY(){
 		return y;
 	}
+	public int getEgg(){
+		return egg;
+	}
 	
+	public void increaseEgg(){
+		++egg;
+	}
 	public void resetEgg(){
 		egg = 0;
 	}
