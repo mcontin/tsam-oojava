@@ -23,7 +23,7 @@ public class Main {
 		for(Film film: films){
 			tariffa += film.getTariffa();
 		}
-		return tariffa;
+		return tariffa/100;
 	}
 	
 }

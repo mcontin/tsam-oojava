@@ -11,7 +11,7 @@ public class Bluray extends Film{
 		}
 		
 		for(int i=0; i<getGiorni(); i++){
-			tariffa += (tariffa)*10; 
+			tariffa += tariffa*10; 
 		}
 		
 		return tariffa;

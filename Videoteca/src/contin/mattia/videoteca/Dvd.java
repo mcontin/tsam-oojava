@@ -2,7 +2,6 @@ package contin.mattia.videoteca;
 
 public class Dvd extends Film{
 
-
 	public int getTariffa(){
 		if(getGiorni() <= 2){
 			return 150 * getGiorni();
