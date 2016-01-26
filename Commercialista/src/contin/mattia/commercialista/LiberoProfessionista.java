@@ -27,4 +27,8 @@ public class LiberoProfessionista extends Persona{
 		this.fatture = fatture;
 	}
 	
+	public double getIncasso(){
+		return 50 + (0.50 * this.getFatture());
+	}
+	
 }

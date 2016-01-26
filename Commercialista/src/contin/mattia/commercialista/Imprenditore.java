@@ -42,5 +42,13 @@ public class Imprenditore extends Persona{
 		this.fatture = fatture;
 	}
 	
+	public double getIncasso(){
+		double incasso = 500;
+		if(this.getFatture() > 100){
+			incasso += (this.getFatture() - 100);
+		}
+		return incasso;
+	}
+	
 	
 }

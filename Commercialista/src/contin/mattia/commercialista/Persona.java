@@ -42,6 +42,6 @@ public class Persona {
 		this.cf = cf;
 	}
 	
-	
+	public double getIncasso(){return 0;};
 	
 }

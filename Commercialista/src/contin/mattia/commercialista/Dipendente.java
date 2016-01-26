@@ -10,5 +10,8 @@ public class Dipendente extends Persona{
 		super(nome, cognome, cf);
 	}
 	
+	public double getIncasso(){
+		return 50;
+	}
 	
 }
