@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
@@ -18,7 +17,6 @@ import com.google.maps.model.GeocodingResult;
 public class Main {
 	
 	public static void main(String[] args) {
-		//AIzaSyB5GGoPW7HZwSr5t2Oz50-rdCkCZhECuEU
 		try{
 			//17 ; 18 keywords
 			FileReader file = new FileReader("src/main/resources/CSV/attiv_commerc.csv");
@@ -65,13 +63,6 @@ public class Main {
 			}
 	        System.out.println("Numero record: " + (i-1));
 	        
-	        /*
-	        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyB5GGoPW7HZwSr5t2Oz50-rdCkCZhECuEU");
-			GeocodingResult[] results =  GeocodingApi.geocode(context,
-					"Milano " + addresses.get(inputId)).await();
-			System.out.println(results[0].formattedAddress);
-			*/
-	        
 			FileWriter fw = new FileWriter("nomefileout.csv");
 			PrintWriter pw = new PrintWriter(fw);
 			pw.println("id1;lat;lng;google address");
@@ -80,11 +71,13 @@ public class Main {
 			GeoApiContext context = null;
 			GeocodingResult[] results = null;
 			
+			
+			String key = null;
 			for(Address tAddress: addresses.keySet()) {
 		    	System.out.println(tAddress.toString());
 		        pw.println(tAddress);
 		        if(k<10){
-		        context = new GeoApiContext().setApiKey("AIzaSyB5GGoPW7HZwSr5t2Oz50-rdCkCZhECuEU");
+		        context = new GeoApiContext().setApiKey(key);
 				results =  GeocodingApi.geocode(context,
 						"Milano " + tAddress.toString()).await();
 				System.out.println(results[0].formattedAddress);
