@@ -51,10 +51,8 @@ public class Commercialista {
 	public int clientiDuplicati() {
 		int tot = 0;
 		for(Cliente c: clienti.keySet()){
-			if(clienti.get(c) > 1){
 				tot += clienti.get(c) - 1;
 				//++tot;
-			}
 		}
 		return tot;
 	}
